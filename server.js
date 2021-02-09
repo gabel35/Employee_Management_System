@@ -1,7 +1,7 @@
 require('dotenv').config();
-const express = require('express');
+const inquirer = require('inquirer');
 const mysql = require('mysql');
-const app = express();
+const cTable = require('console.table');
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -22,7 +22,7 @@ function employeeSearch() {
         name: "action",
         type: "list",
         message: "What would you like to do?",
-        choices: ["View Information", "Add Information", "Update Information", "Delete Information"]
+        choices: ["View Information", "Add Information", "Update Information", "Delete Information", "Exit"]
     })
     .then(answer => {
         if (answer.action === "View Information"){
@@ -42,11 +42,56 @@ function employeeSearch() {
 function viewInfo(){
     inquirer
     .prompt({
-
+        name: "view",
+        type: "list",
+        message: "What would you like to view?",
+        choices: ["View All Employees", "View Employees by Department", "View Employees by Role/Position", "View Employees by Manager", "View the Total Utilized Budget of a Department", "Go back"]
     })
-    .then({
-
-    })
+    .then(answer => {
+        if (answer.view === "View All Employees"){
+            var query = `
+                SELECT employee.id, first_name, last_name, title, salary, department.department_name 
+                FROM employee 
+                INNER JOIN role ON (employee.role_id = role.id) 
+                INNER JOIN department ON (role.department_id = department.id)
+            `;
+            connection.query(query, function(err, res) {
+                if (err) throw err;
+                console.table(res);
+                employeeSearch();
+            });
+        } else if (answer.view === "View Employees by Department"){
+            departments = //tie in to the department_name variable//
+            function viewEmpDept () {
+                inquirer
+                .prompt ({
+                    name: "dept",
+                    type: "list",
+                    message: "Which department?",
+                    choices: [`${departments}`]
+                })
+                    var query = `
+                    SELECT employee.id, first_name, last_name, title, salary, department_name 
+                    FROM employee 
+                    INNER JOIN role ON (employee.role_id = role.id) 
+                    INNER JOIN department ON (role.department_id = department.id)
+                    WHERE ?
+                `;
+                connection.query(query, { department_name : answer.dept }, function(err, res) {
+                    if (err) throw err;
+                    console.table(res);
+                });
+            }
+        } else if (answer.view === "View Employees by Role/Position"){
+            employeeSearch();
+        } else if (answer.view === "View Employees by Manager"){
+            employeeSearch();
+        } else if (answer.view === "View the Total Utilized Budget of a Department"){
+            employeeSearch();
+        } else {
+            employeeSearch();
+        }
+    });
 }
 
 function addInfo(){

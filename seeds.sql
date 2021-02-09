@@ -1,7 +1,7 @@
 USE institutional_db;
 
 /* Inserting fake data into tables */
-INSERT INTO department (name)
+INSERT INTO department (department_name)
 VALUES ("Emergency Medicine"), ("Cardiology"), ("Neurology");
 
 INSERT INTO role (title, salary, department_id)
