@@ -249,37 +249,48 @@ function addInfo(){
                 message: "Does this employee have a manager??",
                 choices: ["Yes", "No"]
             })
-            .then(answer => {
+            .then(answer => {                
                 if (answer.manager === "Yes"){
                     employees = //tie in to the names of the employees in the employee table//
                     function addMngr(){
                         inquirer
                         .prompt({
-                            name: "manager",
+                            name: "mngr",
                             type: "list",
                             message: "Who is this employee's manager?",
                             choices: ["${employees}"]
                         })
+                        .then(answer => {
+                            var query = 'INSERT INTO employee SET ?';
+                            connection.query(query, {
+                                first_name: answer.first_name,
+                                last_name: answer.last_name,
+                                // role_id: answer.role
+                                //manager_id: answer.mngr
+                            }, function(err, res) {
+                                if (err) throw err;
+                                console.log("The folowing employee has been added\n" + res.affectedRows);
+                                employeeSearch();
+                            });
+                        })
                     };
-                } else  (answer.action === "Add Information"){
-                    addInfo();
-                }
-                
-                var query = 'INSERT INTO employee SET ?';
-                connection.query(query, {
-                    first_name: answer.title,
-                    last_name: answer.salary,
-                    role_id:
-                    // manager_id: answer.manager
-                }, function(err, res) {
-                    if (err) throw err;
-                    console.log("The folowing role has been added\n" + res.affectedRows);
-                    employeeSearch();
-                });  
-            });      
+                } else {
+                    var query = 'INSERT INTO employee SET ?';
+                    connection.query(query, {
+                        first_name: answer.first_name,
+                        last_name: answer.last_name,
+                        // role_id: answer.role
+                        //manager_id: null
+                    }, function(err, res) {
+                        if (err) throw err;
+                        console.log("The folowing employee has been added\n" + res.affectedRows);
+                        employeeSearch();
+                    });
+                };
+            }); 
         } else {
             employeeSearch();
-        }
+        };
     });
 }
 
