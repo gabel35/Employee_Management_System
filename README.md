@@ -27,7 +27,7 @@ For the MySQL connection to function, edit line 10 in the server.js to include y
 
 Run node server.js (or npm start) to start the application in your terminal. Upon starting, the application will ask you a series of questions to allow you to either view, add, update, or delete information in the database. 
 
-[DEMO Video](https://drive.google.com/file/d/1SY-ylTQKrfZKMLXJ8LjfsixM48StWpxv/view?usp=sharing)
+[DEMO Video]()
 
 ![Employee Who](./public/assets/employee_who.PNG)
 
