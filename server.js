@@ -297,7 +297,10 @@ function addInfo(){
 function updateInfo(){
     inquirer
     .prompt({
-
+        name: "update",
+        type: "list",
+        message: "What would you like to update?",
+        choices: ["A Department", "A Role/Position", "An Employee", "Go back"]
     })
     .then({
         
