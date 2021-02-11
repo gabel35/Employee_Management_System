@@ -22,7 +22,11 @@ function employeeSearch() {
         name: "action",
         type: "list",
         message: "What would you like to do?",
-        choices: ["View Information", "Add Information", "Update Information", "Delete Information", "Exit"]
+        choices: ["View Information", 
+        "Add Information", 
+        "Update Information", 
+        // "Delete Information", 
+        "Exit"]
     })
     .then(answer => {
         if (answer.action === "View Information"){
@@ -72,8 +76,9 @@ function viewInfo(){
                 if (err) throw err;
                 for(var i=0;i<res.length;i++){
                 //    console.log(res[i].department_name)
-                    departments.push(res[i].department_name);
-                    console.log(departments)
+                   departments = [res[i].department_name];
+                   console.log(departments);
+                    // departments.push(res[i].department_name);
                 }
             })
             viewEmpDept();
@@ -83,7 +88,7 @@ function viewInfo(){
                     name: "dept",
                     type: "list",
                     message: "Which department?",
-                    choices: [`${departments}`]
+                    choices: departments
                 })
                 .then(answer => {    
                     var query = `
@@ -311,17 +316,110 @@ function updateInfo(){
         message: "What would you like to update?",
         choices: ["A Department", "A Role/Position", "An Employee", "Go back"]
     })
-    .then({
-        
-    })
+    .then(answer => {
+        if (answer.update === "A Department"){
+            inquirer
+            .prompt({
+                name: "department_name",
+                type: "list",
+                message: "What is the department name you want to update?",
+                choices: ["Emergency Medicine", "Cardiology", "Neurology"]
+            },
+            {
+                name: "department_update",
+                type: "input",
+                message: "what do you want the updated name to be?"
+            })
+            .then(answer => {
+                var query = 'UPDATE department SET ? WHERE ?';
+                connection.query(query, [{department_name: answer.department_update}, {department_name: answer.department_name}], function(err, res) {
+                    if (err) throw err;
+                    console.log("Departments:\n" + res);
+                    employeeSearch();
+                });
+            });
+        } else if (answer.update === "A Role/Position"){
+            inquirer
+            .prompt({
+                name: "role",
+                type: "list",
+                message: "What is the name of the role/position you want to update?",
+                choices: []
+            },
+            {
+                name: "title_update",
+                type: "input",
+                message: "What is the updated title?"
+            },
+            {
+                name: "salary_update",
+                type: "input",
+                message: "What is the updated salary?"
+            },
+            {
+                name: "dept_update",
+                type: "choices",
+                message: "What is the updated department?",
+                choices: departments
+            })
+            .then(answer => {
+                var query = 'UPDATE role SET ? WHERE ?';
+                connection.query(query, [{title: answer.title_update, salary: answer.salary_update, department_id: answer.dept_update}, {title: answer.role}], function(err, res) {
+                    if (err) throw err;
+                    console.log("Roles:\n" + res);
+                    employeeSearch();
+                });
+            });
+        } else if (answer.update === "An Employee"){
+            inquirer
+            .prompt({
+                name: "employee",
+                type: "list",
+                message: "What is the name of the employee you want to update?",
+                choices: []
+            },
+            {
+                name: "firstName_update",
+                type: "input",
+                message: "What is the updated first name?"
+            },
+            {
+                name: "lastName_update",
+                type: "input",
+                message: "What is the updated last name?"
+            },
+            {
+            name: "role_update",
+            type: "choices",
+            message: "What is the updated role?",
+            choices: roles
+            },
+            {
+                name: "mngr_update",
+                type: "choices",
+                message: "What is the updated deparmanagertment?",
+                choices: employees
+            })
+            .then(answer => {
+                var query = 'UPDATE role SET ? WHERE ?';
+                connection.query(query, [{first_name: answer.firstName_update, last_name: answer.lastName_update, role_id: answer.role_update, manager_id: answer.mngr_update}, {title: answer.role}], function(err, res) {
+                    if (err) throw err;
+                    console.log("Roles:\n" + res);
+                    employeeSearch();
+                }); 
+            });
+        } else {
+            employeeSearch();
+        };
+    });
 }
 
-function deleteInfo(){
-    inquirer
-    .prompt({
+// function deleteInfo(){
+//     inquirer
+//     .prompt({
 
-    })
-    .then({
+//     })
+//     .then({
         
-    })
-}
+//     })
+// }
