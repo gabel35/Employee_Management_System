@@ -67,7 +67,16 @@ function viewInfo(){
                 employeeSearch();
             });
         } else if (answer.view === "View Employees by Department"){
-            departments = //tie in to the department_name variable//
+            var departments = [];
+            connection.query('SELECT department_name FROM department', function(err, res){
+                if (err) throw err;
+                for(var i=0;i<res.length;i++){
+                //    console.log(res[i].department_name)
+                    departments.push(res[i].department_name);
+                    console.log(departments)
+                }
+            })
+            viewEmpDept();
             function viewEmpDept () {
                 inquirer
                 .prompt ({

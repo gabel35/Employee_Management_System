@@ -29,9 +29,4 @@ CREATE TABLE employee (
 );
 
 
--- select * from department;
--- select * from role;
--- select * from employee;
-
-
 
