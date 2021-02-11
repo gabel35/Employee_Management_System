@@ -29,7 +29,7 @@ Run node server.js (or npm start) to start the application in your terminal. Upo
 
 [DEMO Video](https://drive.google.com/file/d/1AiQc2e2vT04jsPrT-eOFzzJP047gO5y_/view?usp=sharing)
 
-![Employee Who](./assets/employee_who.PNG)
+![Employee Who](./Assets/employee_who.PNG)
 
 
 ## Credits
